@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet Filter implementation class AuthenticatorFilter
  */
-@WebFilter(filterName="authFilter" , urlPatterns= {"/dashboard"})
+@WebFilter(filterName="authFilter" , urlPatterns= {"/dashboard", "/student"})
 public class AuthenticatorFilter implements Filter {
 
     /**

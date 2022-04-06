@@ -40,6 +40,10 @@ public class DashboardServlet extends HttpServlet {
 
 		out.println("<p align=center><a href=logout> Logout </a></p>");
 		out.println("<p> Hello, " + username + "</p>");
+		
+		out.println("<p>");
+		out.println("<nav>");
+		out.println("<a href=student>Manage Student</a>");
 
 		out.println("</body></html>");
 	}
