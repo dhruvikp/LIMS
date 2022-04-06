@@ -60,6 +60,8 @@ public class LoginServlet extends HttpServlet {
 
 			if (rs.next()) {
 				response.sendRedirect("dashboard");
+				HttpSession session = request.getSession();
+				session.setAttribute("username", userName);
 			}else {
 				response.sendRedirect("login");
 			}

@@ -11,16 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class DashboardServlet
+ * Servlet implementation class LogoutServlet
  */
-@WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public DashboardServlet() {
+	public LogoutServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -31,16 +31,13 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
+		session.invalidate();
 
 		PrintWriter out = response.getWriter();
 		out.println("<html><body>");
-		out.println("<h1 align=\"center\">Library Management System</h1>");
-
-		out.println("<p align=center><a href=logout> Logout </a></p>");
-		out.println("<p> Hello, " + username + "</p>");
-
+		out.println("You have been successfully logged out, Please click <a href=login> here </a> to login again.");
 		out.println("</body></html>");
 	}
 
