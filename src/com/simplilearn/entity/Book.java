@@ -37,6 +37,9 @@ public class Book {
 			@JoinColumn(name = "author_id") })
 	private Set<Author> authors = new HashSet<>();
 
+	@Column(name="issue_by")
+	private String issueBy ;
+	
 	public int getBookId() {
 		return bookId;
 	}
@@ -77,5 +80,13 @@ public class Book {
 
 	public void setAuthors(Set<Author> authors) {
 		this.authors = authors;
+	}
+
+	public String getIssueBy() {
+		return issueBy;
+	}
+
+	public void setIssueBy(String issueBy) {
+		this.issueBy = issueBy;
 	}
 }
