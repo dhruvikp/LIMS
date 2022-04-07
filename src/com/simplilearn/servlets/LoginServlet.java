@@ -59,7 +59,13 @@ public class LoginServlet extends HttpServlet {
 			ResultSet rs = preparedStmt.executeQuery();
 
 			if (rs.next()) {
-				response.sendRedirect("dashboard");
+				String userType = rs.getString("USER_TYPE");
+				if(userType.equalsIgnoreCase("admin")) {
+					response.sendRedirect("dashboard");	
+				} else {
+					response.sendRedirect("studentDashboard.jsp");
+				}
+				
 				HttpSession session = request.getSession();
 				session.setAttribute("username", userName);
 			}else {
