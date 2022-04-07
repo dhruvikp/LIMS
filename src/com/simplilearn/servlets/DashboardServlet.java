@@ -43,8 +43,9 @@ public class DashboardServlet extends HttpServlet {
 		
 		out.println("<p>");
 		out.println("<nav>");
-		out.println("<a href=student>Manage Student</a>");
-
+		out.println("<a href=student>Manage Student</a><br/>");
+		out.println("<a href=book>Manage Book</a><br/>");
+		
 		out.println("</body></html>");
 	}
 
