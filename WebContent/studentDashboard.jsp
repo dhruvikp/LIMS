@@ -8,14 +8,12 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
-
+	<h2>Search Book</h2>
 	<form action="bookSearch.jsp" method="post">
-		Book Name : <input type="text" name="bookName" />
-		<input type="submit" value="Search"/>
+		Book Name : <input type="text" name="bookName" /> <input
+			type="submit" value="Search" />
 	</form>
-
-
-
-
+	<h2>All Reports</h2>
+	<a href="allIssuedBook.jsp">All issued Books</a>
 </body>
 </html>

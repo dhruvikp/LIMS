@@ -46,6 +46,28 @@ public class BookDAO {
 		return books;
 	}
 	
+	public static List<Book> listBooksByIssuerName(String issuerName) {
+		Session session = null;
+		List<Book> books = null;
+		try {
+			// 1. Build session factory
+			SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+			// 2. Create session object
+			session = sessionFactory.openSession();
+
+			// 3. Define Query and execute it
+			books = session.createQuery("from Book where issueBy = '"+issuerName+"'").list();
+
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return books;
+	}
+	
 	public static List<Book> listBooks() {
 		Session session = null;
 		List<Book> books = null;

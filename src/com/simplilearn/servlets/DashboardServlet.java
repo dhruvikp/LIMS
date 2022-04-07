@@ -47,9 +47,7 @@ public class DashboardServlet extends HttpServlet {
 		out.println("<a href=book>Manage Book</a><br/>");
 		out.println("<h2>Reports</h2>");
 		out.println("<a href=allBooksReport.jsp>All Books Report</a><br/>");
-		out.println("<a href=allBooksReport.jsp>All Books Report</a><br/>");
-		out.println("<a href=allBooksReport.jsp>All Books Report</a><br/>");
-		
+		out.println("<a href=allBooksByAuthor.jsp>All Books By Author</a><br/>");
 		out.println("</body></html>");
 	}
 

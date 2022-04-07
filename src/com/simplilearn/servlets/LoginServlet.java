@@ -60,14 +60,15 @@ public class LoginServlet extends HttpServlet {
 
 			if (rs.next()) {
 				String userType = rs.getString("USER_TYPE");
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("username", userName);
+				
 				if(userType.equalsIgnoreCase("admin")) {
 					response.sendRedirect("dashboard");	
 				} else {
 					response.sendRedirect("studentDashboard.jsp");
 				}
-				
-				HttpSession session = request.getSession();
-				session.setAttribute("username", userName);
 			}else {
 				response.sendRedirect("login");
 			}
