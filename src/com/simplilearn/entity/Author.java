@@ -24,7 +24,7 @@ public class Author {
 	@Column(name = "author_name")
 	private String authorName;
 
-	@ManyToMany(mappedBy = "authors", cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy = "authors")
 	private Set<Book> books = new HashSet<>();
 
 	public int getAuthorId() {

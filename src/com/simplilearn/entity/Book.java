@@ -29,7 +29,7 @@ public class Book {
 	@Column(name = "publish_date")
 	private Date publishDate;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name = "book_auther", joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "author_id") })
 	private Set<Author> authors = new HashSet<>();

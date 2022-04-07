@@ -5,13 +5,11 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -96,6 +94,7 @@ public class BookServlet extends HttpServlet {
 			out.println("<p>No Books found, Please register books.</p>");
 		}
 		out.println("</body></html>");
+		session.close();
 	}
 
 	/**
@@ -117,40 +116,8 @@ public class BookServlet extends HttpServlet {
 			throw new IllegalArgumentException("Please fill all information");
 		}
 
-		Book book = new Book();
-		book.setBookName(bookName);
-		Date pubDate;
-		try {
-			pubDate = new SimpleDateFormat("dd/MM/yyyy").parse(bookPubDate);
-			book.setPublishDate(pubDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		List<Book> books = new ArrayList<>();
-		books.add(book);
-		
-		
-		SessionFactory sf = HibernateUtil.buildSessionFactory();
-		Session session1 = sf.openSession();
-		
-		String[] bookAuthors= bookAuthorName.split(",");
-		
-		Set<Author> authors = new HashSet<>();
-		for(String bookAuthor : bookAuthors) {
-			List<Author> authorsDB = session1.createQuery("from Author where authorName = '"+ bookAuthorName+"'").list();
-			Author autDB = null;
-			
-			if(authorsDB!=null && authorsDB.size()>0) {
-				autDB = authorsDB.get(0);
-			} else {
-				autDB = new Author();
-				autDB.setAuthorName(bookAuthorName);
-			}
-			authors.add(autDB);
-		}
-		book.setAuthors(authors);
-
-		Session session = sf.openSession();
+		Book book = populateBook(bookName, bookPubDate, bookAuthorName);
+		Session session = HibernateUtil.buildSessionFactory().openSession();
 		Transaction tx = session.beginTransaction();
 
 		session.save(book);
@@ -160,23 +127,57 @@ public class BookServlet extends HttpServlet {
 		response.sendRedirect("book");
 	}
 
+	private Book populateBook(String bookName, String bookPubDate, String bookAuthorName) {
+		Book book = new Book();
+		book.setBookName(bookName);
+		Date pubDate;
+		try {
+			pubDate = new SimpleDateFormat("dd/MM/yyyy").parse(bookPubDate);
+			book.setPublishDate(pubDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String[] bookAuthors = bookAuthorName.split(",");
+
+		Set<Author> authors = getAuthors(book, bookAuthors);
+		book.setAuthors(authors);
+		return book;
+	}
+
+	private Set<Author> getAuthors(Book book, String[] bookAuthors) {
+		Session session1 = HibernateUtil.buildSessionFactory().openSession();
+		Set<Author> authors = book.getAuthors();
+		for (String bookAuthor : bookAuthors) {
+			List<Author> authorsDB = session1.createQuery("from Author where authorName = '" + bookAuthor + "'")
+					.list();
+			Author autDB = null;
+
+			if (authorsDB != null && authorsDB.size() > 0) {
+				autDB = authorsDB.get(0);
+			} else {
+				autDB = new Author();
+				autDB.setAuthorName(bookAuthor);
+			}
+			authors.add(autDB);
+		}
+		session1.close();
+		return authors;
+	}
+
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("Do Delete invoked");
 		Integer bookId = Integer.valueOf(request.getParameter("bookId"));
 		SessionFactory sf = HibernateUtil.buildSessionFactory();
 		Session session = sf.openSession();
 		Transaction tx = session.beginTransaction();
-		
-		List<Book> books = session.createQuery("Select b from Book b where b.bookId="+bookId).list();
+
+		List<Book> books = session.createQuery("Select b from Book b where b.bookId=" + bookId).list();
 		Book book = books.get(0);
-		
+
 		book.getAuthors().forEach(author -> {
 			author.getBooks().remove(book);
-			session.persist(author);
-			book.getAuthors().remove(author);
-			session.persist(book);
 		});
+		session.delete(book);
 		tx.commit();
 		session.close();
 		try {
@@ -185,5 +186,4 @@ public class BookServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 }
